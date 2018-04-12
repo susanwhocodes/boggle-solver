@@ -5,6 +5,7 @@ namespace App;
 use \Log;
 use \Ds\Set;
 use App\BoggleCoord;
+use \Storage;
 
 class Boggle
 {
@@ -65,13 +66,14 @@ class Boggle
     */
     public function getAllWords($maxLength) {
         Log::debug("Starting to get all words...");
-        $exists = file_exists("/home/vagrant/files/Unabr.dict");
+        $filePath = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix() . "Unabr.dict";
+        $exists = file_exists($filePath);
         if (!$exists) {
             Log::error("Dictionary file not found!");
             return null;
         }
         
-        $handle = @fopen("/home/vagrant/files/Unabr.dict", "r");
+        $handle = @fopen($filePath, "r");
         $set = new \Ds\Set();
         if ($handle) {
             $i = 0;
